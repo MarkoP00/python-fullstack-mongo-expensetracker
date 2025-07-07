@@ -12,7 +12,7 @@ const UserBalance = ({ transactions, isLoading }) => {
     let totalIncome = 0;
 
     transactions.forEach((transaction) => {
-      const amount = transaction.expense_amount;
+      const amount = transaction.transaction_amount;
       if (amount < 0) {
         totalExpenses += amount;
       } else {

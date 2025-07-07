@@ -11,9 +11,9 @@ export default async function getTransactions() {
     }
 
     const responseData = await response.json();
-    const expenses = responseData.expenses;
+    const transactions = responseData.transactions;
 
-    return expenses;
+    return transactions;
   } catch (error) {
     callToast("warning", error.message);
   }

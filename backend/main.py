@@ -1,23 +1,24 @@
 from flask import request, jsonify
 from config import app, db
-from models import Expense
+from models import Transaction
 from datetime import datetime
 from services.date_utils import handleDate
 from sqlalchemy.exc import SQLAlchemyError
 
-# GET ALL EXPENSES
+# GET ALL TRANSACTIONS
 
 
 @app.route('/', methods=['GET'])
-@app.route('/expenses', methods=['GET'])
-def get_expenses():
+@app.route('/transactions', methods=['GET'])
+def get_transactions():
     try:
-        expenses = Expense.query.all()
+        transactions = Transaction.query.all()
 
-        json_expenses = list(map(lambda expense: expense.to_json(), expenses))
+        json_transactions = list(
+            map(lambda transaction: transaction.to_json(), transactions))
 
         return jsonify({
-            'expenses': json_expenses,
+            'transactions': json_transactions,
             "message": "Fetch successful"
         }), 200
 
@@ -33,29 +34,29 @@ def get_expenses():
             "error": str(e)
         }), 500
 
-# GET SINGLE EXPENSE
+# GET SINGLE TRANSACTION
 
 
-@app.route('/expenses/<int:expense_id>', methods=[
+@app.route('/transactions/<transaction_id>', methods=[
     'GET'
 ])
-def get_single_expense(expense_id):
+def get_single_transaction(transaction_id):
 
-    expense = Expense.query.get(expense_id)
+    transaction = Transaction.query.get(transaction_id)
 
-    if not expense:
-        return jsonify({"message": "Expense not found"}), 404
+    if not transaction:
+        return jsonify({"message": "Transaction not found"}), 404
 
-    return jsonify(expense.to_json()), 200
+    return jsonify(transaction.to_json()), 200
 # CREATE EXPENSE
 
 
-@app.route('/expenses', methods=['POST'])
-def create_expense():
+@app.route('/transactions', methods=['POST'])
+def create_transaction():
     data = request.json
 
-    expense_amount = data.get('expense_amount')
-    expense_name = data.get('expense_name')
+    transaction_amount = data.get('transaction_amount')
+    transaction_name = data.get('transaction_name')
     # expense_date = data.get('expense_date')
 
     # Use current date if none provided
@@ -68,65 +69,65 @@ def create_expense():
     #     except ValueError:
     #         return jsonify({"message": "Invalid date format (use YYYY-MM-DD)"}), 400
 
-    if not expense_amount or not expense_name:
+    if not transaction_name or not transaction_amount:
         return jsonify({"message": "Amount and name are required"}), 400
 
-    new_expense = Expense(
-        expense_amount=expense_amount,
-        expense_name=expense_name,
+    new_transaction = Transaction(
+        transaction_name=transaction_name,
+        transaction_amount=transaction_amount,
         # expense_date=expense_date_obj
     )
 
     try:
-        db.session.add(new_expense)
+        db.session.add(new_transaction)
         db.session.commit()
     except Exception as e:
         print(e)
         return jsonify({"message": str(e)}), 400
 
-    return jsonify({"message": "Expense created"}), 201
+    return jsonify({"message": "Transaction created"}), 201
 
-# UPDATE EXPENSE
+# UPDATE TRANSACTION
 
 
-@app.route('/expenses/<int:expense_id>', methods=['PATCH'])
-def update_expense(expense_id):
+@app.route('/transactions/<transaction_id>', methods=['PATCH'])
+# if i were using db.Integer, provided id should be handled like this <int:expense_id> but bcs it's a string, i have to do it like this <string:expense_id>
+def update_transaction(transaction_id):
+    transaction = Transaction.query.get(transaction_id)
 
-    expense = Expense.query.get(expense_id)
-
-    if not expense:
-        return jsonify({"message": "Expense not found"}), 404
+    if not transaction:
+        return jsonify({"message": "Transaction not found"}), 404
 
     data = request.get_json()
 
     if not data:
         return jsonify({"message": "No data provided"}), 400
 
-    if not data.get("expense_name") or not data.get("expense_amount"):
-        return jsonify({"message": "Invalid expense data"}), 400
+    if not data.get("transaction_name") or not data.get("transaction_amount"):
+        return jsonify({"message": "Invalid transaction data"}), 400
 
-    expense.expense_name = data["expense_name"]
-    expense.expense_amount = data["expense_amount"]
+    transaction.transaction_name = data["transaction_name"]
+    transaction.transaction_amount = data["transaction_amount"]
     # expense.expense_date = handleDate()
 
     db.session.commit()
 
-    return jsonify({"message": "Fetch successfull", "expense": expense.to_json()}), 200
+    return jsonify({"message": "Fetch successfull", "transaction": transaction.to_json()}), 200
 
 # DELETE EXPENSE
 
 
-@app.route('/expenses/<int:expense_id>', methods=['DELETE'])
-def delete_expense(expense_id):
-    expense = Expense.query.get(expense_id)
+@app.route('/transactions/<transaction_id>', methods=['DELETE'])
+def delete_transaction(transaction_id):
+    transaction = Transaction.query.get(transaction_id)
 
-    if not expense:
-        return jsonify({"message": "Expense not found"}), 404
+    if not transaction:
+        return jsonify({"message": "Transaction not found"}), 404
 
-    db.session.delete(expense)
+    db.session.delete(transaction)
     db.session.commit()
 
-    return jsonify({"message": "Expense deleted."}), 200
+    return jsonify({"message": "Transaction deleted."}), 200
 
 
 if __name__ == '__main__':

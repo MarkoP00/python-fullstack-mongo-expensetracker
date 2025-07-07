@@ -5,14 +5,13 @@ export default async function createTransaction(
 ) {
   try {
     const fetchURL = import.meta.env.VITE_SERVER_URL;
-    console.log(fetchURL);
 
     const newTransaction = {
-      expense_name: transactionName,
-      expense_amount: transactionAmount,
+      transaction_name: transactionName,
+      transaction_amount: transactionAmount,
     };
 
-    const response = await fetch(`${fetchURL}/expenses`, {
+    const response = await fetch(`${fetchURL}/transactions`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

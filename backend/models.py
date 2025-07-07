@@ -1,23 +1,25 @@
 from config import db
 from datetime import datetime
+import uuid
 
 
-class Expense(db.Model):
+class Transaction(db.Model):
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.String(36), primary_key=True,
+                   default=lambda: str(uuid.uuid4()))
 
-    expense_amount = db.Column(db.Float(), unique=False, nullable=False)
+    transaction_amount = db.Column(db.Float(), unique=False, nullable=False)
 
-    expense_name = db.Column(db.String(100), unique=False,
-                             nullable=False, default="Expense")
+    transaction_name = db.Column(db.String(100), unique=False,
+                                 nullable=False, default="Transaction")
 
-    expense_date = db.Column(db.Date(), unique=False,
-                             nullable=False, default=datetime.now)
+    transaction_date = db.Column(db.Date(), unique=False,
+                                 nullable=False, default=datetime.now)
 
     def to_json(self):
         return {
             "id": self.id,
-            "expense_amount": self.expense_amount,
-            "expense_name": self.expense_name,
-            "expense_date": self.expense_date.strftime("%Y-%m-%d")
+            "transaction_amount": self.transaction_amount,
+            "transaction_name": self.transaction_name,
+            "transaction_date": self.transaction_date.strftime("%Y-%m-%d")
         }

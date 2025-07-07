@@ -1,19 +1,20 @@
 import callToast from "./callToast";
 
 export default async function patchTransaction(
-  expense_name,
-  expense_amount,
+  transaction_name,
+  transaction_amount,
   id
 ) {
   const fetchURL = import.meta.env.VITE_SERVER_URL;
 
   try {
     const transaction = {
-      expense_amount,
-      expense_name,
+      transaction_name,
+      transaction_amount,
       id,
     };
-    const response = await fetch(`${fetchURL}/expenses/${id}`, {
+
+    const response = await fetch(`${fetchURL}/transactions/${id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",

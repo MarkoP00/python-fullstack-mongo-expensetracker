@@ -5,9 +5,11 @@ import deleteTransaction from "../services/deleteTransaction";
 
 const SingleTransaction = ({ transaction, onClose, onTransactionUpdate }) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [expenseName, setExpenseName] = useState(transaction.expense_name);
-  const [expenseAmount, setExpenseAmount] = useState(
-    transaction.expense_amount
+  const [transactionName, setTransactionName] = useState(
+    transaction.transaction_name
+  );
+  const [transactionAmount, setTransactionAmount] = useState(
+    transaction.transaction_amount
   );
 
   const [popupTitle, setPopupTitle] = useState("");
@@ -23,15 +25,14 @@ const SingleTransaction = ({ transaction, onClose, onTransactionUpdate }) => {
       setIsEditing((prev) => !prev);
     } else {
       const response = await patchTransaction(
-        expenseName,
-        expenseAmount,
+        transactionName,
+        transactionAmount,
         transaction.id
       );
 
       if (response) {
-        console.log(response.expense.expense_name);
-        setExpenseName(response.expense.expense_name);
-        setExpenseAmount(response.expense.expense_amount);
+        setTransactionName(response.transaction.transaction_name);
+        setTransactionAmount(response.transaction.transaction_amount);
         onTransactionUpdate();
         setIsEditing((prev) => !prev);
       }
@@ -101,12 +102,12 @@ const SingleTransaction = ({ transaction, onClose, onTransactionUpdate }) => {
                 {isEditing ? (
                   <input
                     className="w-full bg-background/50 border border-action/30 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-1 focus:ring-action"
-                    value={expenseName}
-                    onChange={(e) => setExpenseName(e.target.value)}
+                    value={transactionName}
+                    onChange={(e) => setTransactionName(e.target.value)}
                   />
                 ) : (
                   <p className="text-white text-lg font-medium">
-                    {expenseName}
+                    {transactionName}
                   </p>
                 )}
               </div>
@@ -116,27 +117,27 @@ const SingleTransaction = ({ transaction, onClose, onTransactionUpdate }) => {
                 {isEditing ? (
                   <input
                     className="w-full bg-background/50 border border-action/30 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-1 focus:ring-action"
-                    value={expenseAmount}
+                    value={transactionAmount}
                     type="number"
                     step={0.01}
                     placeholder="Amount"
-                    onChange={(e) => setExpenseAmount(e.target.value)}
+                    onChange={(e) => setTransactionAmount(e.target.value)}
                   />
                 ) : (
                   <p
                     className={`text-2xl font-bold ${
-                      expenseAmount > 0 ? "text-green-400" : "text-red-400"
+                      transactionAmount > 0 ? "text-green-400" : "text-red-400"
                     }`}>
-                    {expenseAmount > 0 ? "+" : ""}
-                    {expenseAmount.toFixed(2)}$
+                    {transactionAmount > 0 ? "+" : ""}
+                    {transactionAmount.toFixed(2)}$
                   </p>
                 )}
               </div>
 
               <div>
-                <p className="text-gray-400 text-sm">Date</p>
+                <p className="text-gray-400 text-sm">Created / Updated</p>
                 <p className="text-white">
-                  {new Date(transaction.expense_date).toLocaleDateString(
+                  {new Date(transaction.transaction_date).toLocaleDateString(
                     "en-US",
                     {
                       year: "numeric",
