@@ -130,8 +130,9 @@ def delete_transaction(transaction_id):
     return jsonify({"message": "Transaction deleted."}), 200
 
 
-if __name__ == '__main__':
-    with app.app_context():
-        db.create_all()
+with app.app_context():
+    db.create_all()
 
+# Only for local dev
+if __name__ == '__main__':
     app.run(debug=True)
