@@ -6,16 +6,21 @@ from models import insert_transaction, get_transactions, delete_transaction, upd
 # GET ALL TRANSACTIONS
 
 
-@app.route('/', methods=['GET'])
 @app.route('/transactions', methods=['GET'])
 def fetch_transactions():
     try:
-        transactions = get_transactions()
+        print("Route hit!")
+        transactions = list(mongo.db.transactions.find())  # direct here
+        print("DB call done!")
+        for t in transactions:
+            t["_id"] = str(t["_id"])
+        print("Formatting done.")
         return jsonify({
             "transactions": transactions,
             "message": "Fetch successful"
         })
     except Exception as e:
+        print("ERROR:", e)
         return jsonify({"message": "Server error", 'error': str(e)}), 500
 
 # GET SINGLE TRANSACTION
