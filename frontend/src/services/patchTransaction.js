@@ -14,7 +14,7 @@ export default async function patchTransaction(
       id,
     };
 
-    const response = await fetch(`${fetchURL}/transactions/${id}`, {
+    const response = await fetch(`${fetchURL}/${id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",

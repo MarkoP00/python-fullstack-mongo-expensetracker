@@ -3,7 +3,7 @@ import callToast from "./callToast";
 export default async function deleteTransaction(id) {
   const fetchURL = import.meta.env.VITE_SERVER_URL;
   try {
-    const response = await fetch(`${fetchURL}/transactions/${id}`, {
+    const response = await fetch(`${fetchURL}/${id}`, {
       method: "DELETE",
     });
 

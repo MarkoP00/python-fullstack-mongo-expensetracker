@@ -11,7 +11,7 @@ export default async function createTransaction(
       transaction_amount: transactionAmount,
     };
 
-    const response = await fetch(`${fetchURL}/transactions`, {
+    const response = await fetch(fetchURL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
