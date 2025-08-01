@@ -11,6 +11,7 @@ def fetch_transactions():
     try:
         print("Route hit!")
         transactions = list(mongo.db.transactions.find())  # direct here
+        print('transactions -> ', transactions)
         print("DB call done!")
         for t in transactions:
             t["_id"] = str(t["_id"])
