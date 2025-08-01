@@ -3,7 +3,7 @@ import callToast from "./callToast";
 export default async function getTransactions() {
   try {
     const fetchURL = import.meta.env.VITE_SERVER_URL;
-
+    alert("fetchURL: ", fetchURL);
     const response = await fetch(fetchURL);
 
     if (!response.ok) {
