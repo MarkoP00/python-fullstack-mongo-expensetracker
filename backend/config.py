@@ -20,13 +20,4 @@ CORS(app,
 # MongoDB configuration
 print('mongo-url ->', os.getenv("MONGODB_URL"))
 app.config["MONGO_URI"] = os.getenv("MONGODB_URL")
-mongo = PyMongo(app)
-
-# Connection test
-try:
-    mongo.db.command('ping')
-    print("✅ MongoDB connection successful!")
-    print(f"Connected to database: {mongo.db.name}")
-except Exception as e:
-    print("❌ MongoDB connection failed!")
-    print(f"Error: {str(e)}")
+mongo = PyMongo()

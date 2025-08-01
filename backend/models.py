@@ -2,6 +2,23 @@ from config import mongo
 from datetime import datetime
 import uuid
 
+# GET TRANSACTIONS
+
+
+def get_transactions():
+    transactions = list(mongo.db.transactions.find())
+    for t in transactions:
+        t["_id"] = str(t["_id"])
+    return transactions
+
+
+# GET SINGLE TRANSACTION
+
+def get_single_transaction(transaction_id: str):
+    transaction = mongo.db.transactions.find_one({"id": transaction_id})
+
+    return transaction
+
 # CREATE TRANSACTION
 
 
@@ -20,22 +37,7 @@ def insert_transaction(transaction_amount, transaction_name: str = "Transaction"
     mongo.db.transactions.insert_one(transaction)
     return transaction
 
-# GET TRANSACTIONS
 
-
-def get_transactions():
-    transactions = list(mongo.db.transactions.find())
-    for t in transactions:
-        t["_id"] = str(t["_id"])
-    return transactions
-
-
-# GET SINGLE TRANSACTION
-
-def get_single_transaction(transaction_id: str):
-    transaction = mongo.db.transactions.find_one({"id": transaction_id})
-
-    return transaction
 # PATCH TRANSACTION
 
 
