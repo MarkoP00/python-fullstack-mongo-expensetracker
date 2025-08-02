@@ -19,7 +19,7 @@ const UserTransactions = ({ transactions, onHandleSingleTransaction }) => {
             <span className="truncate text-text w-full block">
               {transaction.transaction_name}
             </span>
-            <span className="text-center text-text">
+            <span className="text-center text-text s ">
               {new Date(transaction.transaction_date).toLocaleDateString(
                 "en-US",
                 {
