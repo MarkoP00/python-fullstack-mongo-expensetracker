@@ -20,4 +20,4 @@ CORS(app,
 # MongoDB configuration
 print('mongo-url ->', os.getenv("MONGODB_URL"))
 app.config["MONGO_URI"] = os.getenv("MONGODB_URL")
-mongo = PyMongo()
+mongo = PyMongo(app)

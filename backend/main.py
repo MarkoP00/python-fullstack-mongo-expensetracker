@@ -3,31 +3,11 @@ from config import app, mongo
 from models import insert_transaction, get_transactions, delete_transaction, update_transaction_by_id, get_single_transaction
 import os
 
-# Init Mongo connection
-print('mongo-url ->', os.getenv("MONGODB_URL"))
-app.config["MONGO_URI"] = os.getenv("MONGODB_URL")
-mongo.init_app(app)
-
-# Test connection
-try:
-    mongo.db.command('ping')
-    print("✅ MongoDB connection successful!")
-    print(f"Connected to database: {mongo.db.name}")
-except Exception as e:
-    print("❌ MongoDB connection failed!")
-    print(f"Error: {str(e)}")
-
 
 @app.route('/transactions', methods=['GET'])
 def fetch_transactions():
     try:
-        print("Route hit!")
-        transactions = list(mongo.db.transactions.find())
-        print('transactions -> ', transactions)
-        print("DB call done!")
-        for t in transactions:
-            t["_id"] = str(t["_id"])
-        print("Formatting done.")
+        transactions = get_transactions()
         return jsonify({
             "transactions": transactions,
             "message": "Fetch successful"
@@ -37,9 +17,9 @@ def fetch_transactions():
         return jsonify({"message": "Server error", 'error': str(e)}), 500
 
 
-@app.route('/ping')
-def ping():
-    return "pong"
+# @app.route('/ping')
+# def ping():
+#     return "pong"
 
 
 @app.route('/transactions/<transaction_id>', methods=['GET'])
@@ -140,3 +120,17 @@ def remove_transaction(transaction_id):
 # Only for local dev
 if __name__ == '__main__':
     app.run(debug=True)
+
+# # Init Mongo connection
+# print('mongo-url ->', os.getenv("MONGODB_URL"))
+# app.config["MONGO_URI"] = os.getenv("MONGODB_URL")
+# mongo.init_app(app)
+
+# # Test connection
+# try:
+#     mongo.db.command('ping')
+#     print("✅ MongoDB connection successful!")
+#     print(f"Connected to database: {mongo.db.name}")
+# except Exception as e:
+#     print("❌ MongoDB connection failed!")
+#     print(f"Error: {str(e)}")
